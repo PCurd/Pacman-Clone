@@ -1,7 +1,7 @@
-Pacman clone
+Pacman clone  
 
-Stories
-1. Game starts and closes with escape
+Stories  
+1. Game starts and closes with escape  
 2. Pacman appears on screen
 3. Pacman can move in cardinal directions on arrow keys 
 4. Pacman can only move in progressive directions 
