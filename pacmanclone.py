@@ -83,13 +83,13 @@ def DoEvents():
        pygame.quit()
        sys.exit()
       elif event.type == KEYDOWN:
-                if event.key == K_UP:
+                if event.key == K_UP and pacmanObj['facing'] in (LEFT, RIGHT):
                     pacmanObj['facing'] = UP
-                if event.key == K_DOWN:
+                if event.key == K_DOWN and pacmanObj['facing'] in (LEFT, RIGHT):
                     pacmanObj['facing'] = DOWN
-                if event.key == K_LEFT:
+                if event.key == K_LEFT and pacmanObj['facing'] in (UP, DOWN):
                     pacmanObj['facing'] = LEFT
-                if event.key == K_RIGHT:
+                if event.key == K_RIGHT and pacmanObj['facing'] in (UP, DOWN):
                     pacmanObj['facing'] = RIGHT
 
 
