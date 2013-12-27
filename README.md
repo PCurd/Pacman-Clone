@@ -5,6 +5,7 @@ Stories
 ~~2. Pacman appears on screen~~  
 ~~3. Pacman moves in cardinal directions on arrow keys~~  
 ~~4. Pacman can only move in progressive directions~~  
+~~4.5. Pacman animates movement~~  
 5. Walls are drawn  
 6. Walls are loaded from array  
 7. Walls are loaded from disk  

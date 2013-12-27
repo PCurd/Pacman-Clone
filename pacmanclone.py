@@ -18,8 +18,8 @@ gameOverMode = False
 DEBUG = 0
 
 def setup():
-    global PACMAN_IMG
-    
+    global TICK
+    TICK=0
 
 
 
@@ -42,6 +42,7 @@ def RunGame():
 
     if not gameOverMode:
         DoMoves()
+        Animate()
         
     Draw()
     
@@ -63,6 +64,13 @@ def DoMoves():
             break
          if case(): # default, could also just omit condition or 'if True'
             break
+
+def Animate():
+    global TICK
+    TICK +=1
+    if TICK ==5:
+        TICK=0
+        pacmanObj.animation = (0 if pacmanObj.animation == 1 else 1)
             
 def DoEvents():
     for event in pygame.event.get():
@@ -101,13 +109,13 @@ class Animated(object):
     def FacingRect(self):
         for case in switch(self.facing):
             if case(UP):
-                return self.RECT_UP
+                return self.RECT_UP[self.animation]
             if case(DOWN):
-                return self.RECT_DOWN
+                return self.RECT_DOWN[self.animation]
             if case(LEFT):
-                return self.RECT_LEFT
+                return self.RECT_LEFT[self.animation]
             if case(RIGHT):
-                return self.RECT_RIGHT
+                return self.RECT_RIGHT[self.animation]
     def SetSurface(self, path):
         self.surface= pygame.image.load(path)
 
@@ -116,13 +124,14 @@ class Animated(object):
 class Pacman(Animated):
     def __init__(self):
         self.SetSurface('images\sprites\pacman_various_sheet.png')
-    RECT_RIGHT = pygame.Rect(120,0,PACMANSIZE,PACMANSIZE)
-    RECT_LEFT = pygame.Rect(60,0,PACMANSIZE,PACMANSIZE)
-    RECT_UP = pygame.Rect(29,0,PACMANSIZE,PACMANSIZE)
-    RECT_DOWN = pygame.Rect(89,0,PACMANSIZE,PACMANSIZE)
+    RECT_RIGHT = [pygame.Rect(120,0,PACMANSIZE,PACMANSIZE), pygame.Rect(120,30,PACMANSIZE,PACMANSIZE)]
+    RECT_LEFT = [pygame.Rect(60,0,PACMANSIZE,PACMANSIZE), pygame.Rect(60,30,PACMANSIZE,PACMANSIZE)]
+    RECT_UP = [pygame.Rect(30,0,PACMANSIZE,PACMANSIZE), pygame.Rect(30,30,PACMANSIZE,PACMANSIZE)]
+    RECT_DOWN = [pygame.Rect(90,0,PACMANSIZE,PACMANSIZE), pygame.Rect(90,30,PACMANSIZE,PACMANSIZE)]
     x= HALF_WINWIDTH
     y = HALF_WINHEIGHT
     size = PACMANSIZE
+    animation = 0
     
 # This class provides the functionality we want. You only need to look at
 # this if you want to know how this works. It only needs to be defined
