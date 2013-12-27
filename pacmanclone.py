@@ -19,7 +19,7 @@ DEBUG = 0
 
 def setup():
     global PACMAN_IMG
-    PACMAN_IMG = pygame.image.load('images\sprites\pacman_various_sheet.png')
+    
 
 
 
@@ -31,12 +31,7 @@ def main():
     DISPLAYSURF = pygame.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT))
     pygame.display.set_caption('Pacman Clone!')
 
-    pacmanObj = {'surface': PACMAN_IMG,
-                  'facing': RIGHT,
-                  'x': HALF_WINWIDTH,
-                  'y': HALF_WINHEIGHT,
-                 'size': PACMANSIZE,
-                 'obj': Pacman()}
+    pacmanObj = Pacman()
     
     while True: # main game loop
      RunGame()
@@ -52,18 +47,18 @@ def RunGame():
 
 def DoMoves():
 #Move Pacman
-     for case in switch(pacmanObj['facing']):
+     for case in switch(pacmanObj.facing):
          if case(UP):
-            pacmanObj['y'] -= MOVERATE
+            pacmanObj.y -= MOVERATE
             break
          if case(DOWN):
-            pacmanObj['y'] += MOVERATE
+            pacmanObj.y += MOVERATE
             break
          if case(LEFT):
-            pacmanObj['x'] -= MOVERATE
+            pacmanObj.x -= MOVERATE
             break
          if case(RIGHT):
-            pacmanObj['x'] += MOVERATE
+            pacmanObj.x += MOVERATE
             break
          if case(): # default, could also just omit condition or 'if True'
             break
@@ -74,48 +69,55 @@ def DoEvents():
        pygame.quit()
        sys.exit()
       elif event.type == KEYDOWN:
-                if event.key == K_UP and pacmanObj['facing'] in (LEFT, RIGHT):
-                    pacmanObj['facing'] = UP
-                if event.key == K_DOWN and pacmanObj['facing'] in (LEFT, RIGHT):
-                    pacmanObj['facing'] = DOWN
-                if event.key == K_LEFT and pacmanObj['facing'] in (UP, DOWN):
-                    pacmanObj['facing'] = LEFT
-                if event.key == K_RIGHT and pacmanObj['facing'] in (UP, DOWN):
-                    pacmanObj['facing'] = RIGHT
+                if event.key == K_UP and pacmanObj.facing in (LEFT, RIGHT):
+                    pacmanObj.facing = UP
+                if event.key == K_DOWN and pacmanObj.facing in (LEFT, RIGHT):
+                    pacmanObj.facing = DOWN
+                if event.key == K_LEFT and pacmanObj.facing in (UP, DOWN):
+                    pacmanObj.facing = LEFT
+                if event.key == K_RIGHT and pacmanObj.facing in (UP, DOWN):
+                    pacmanObj.facing = RIGHT
 
 
 def Draw():
-    pacmanObj['rect'] = pygame.Rect( (pacmanObj['x'],
-                                               pacmanObj['y'],
-                                               pacmanObj['size'],
-                                               pacmanObj['size']) )
+    pacmanObj.rect = pygame.Rect( (pacmanObj.x,
+                                               pacmanObj.y,
+                                               pacmanObj.size,
+                                               pacmanObj.size) )
     if DEBUG == 1:
-     print pacmanObj['rect']
+     print pacmanObj.rect
 
     DISPLAYSURF.fill(BGCOLOUR)
-    DISPLAYSURF.blit(pacmanObj['surface'], pacmanObj['rect'], FacingRect(pacmanObj))
+    DISPLAYSURF.blit(pacmanObj.surface, pacmanObj.rect, pacmanObj.FacingRect())
     pygame.display.update()
     FPSCLOCK.tick(FPS)
 
-def FacingRect(object):
-    for case in switch(object['facing']):
-        if case(UP):
-            return object['obj'].RECT_UP
-        if case(DOWN):
-            return object['obj'].RECT_DOWN
-        if case(LEFT):
-            return object['obj'].RECT_LEFT
-        if case(RIGHT):
-            return object['obj'].RECT_RIGHT
 
 
 
+class Animated:
+    def FacingRect(self):
+        for case in switch(self.facing):
+            if case(UP):
+                return self.RECT_UP
+            if case(DOWN):
+                return self.RECT_DOWN
+            if case(LEFT):
+                return self.RECT_LEFT
+            if case(RIGHT):
+                return self.RECT_RIGHT
 
-class Pacman:
+class Pacman(Animated):
+    IMG = pygame.image.load('images\sprites\pacman_various_sheet.png')
     RECT_RIGHT = pygame.Rect(120,0,PACMANSIZE,PACMANSIZE)
     RECT_LEFT = pygame.Rect(60,0,PACMANSIZE,PACMANSIZE)
     RECT_UP = pygame.Rect(29,0,PACMANSIZE,PACMANSIZE)
-    RECT_DOWN = pygame.Rect(89,0,PACMANSIZE,PACMANSIZE) 
+    RECT_DOWN = pygame.Rect(89,0,PACMANSIZE,PACMANSIZE)
+    surface= IMG
+    facing = RIGHT
+    x= HALF_WINWIDTH
+    y = HALF_WINHEIGHT
+    size = PACMANSIZE
     
 # This class provides the functionality we want. You only need to look at
 # this if you want to know how this works. It only needs to be defined
