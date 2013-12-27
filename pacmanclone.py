@@ -29,54 +29,44 @@ def main():
     setup()
     FPSCLOCK = pygame.time.Clock()
     DISPLAYSURF = pygame.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT))
-    pygame.display.set_caption('Hello World!')
+    pygame.display.set_caption('Pacman Clone!')
 
     pacmanObj = {'surface': PACMAN_IMG,
                   'facing': RIGHT,
                   'x': HALF_WINWIDTH,
                   'y': HALF_WINHEIGHT,
                  'size': PACMANSIZE}
-
     
     while True: # main game loop
      RunGame()
 
 def RunGame():
     DoEvents()
-    DISPLAYSURF.fill(BGCOLOUR)
-
-
-    pacmanObj['rect'] = pygame.Rect( (pacmanObj['x'],
-                                               pacmanObj['y'],
-                                               pacmanObj['size'],
-                                               pacmanObj['size']) )
-      
-    DISPLAYSURF.blit(pacmanObj['surface'], pacmanObj['rect'], PACMAN_RECT)
-    if DEBUG == 1:
-     print pacmanObj['rect']
-
 
     if not gameOverMode:
-      #Move Pacman
-         for case in switch(pacmanObj['facing']):
-             if case(UP):
-                pacmanObj['y'] -= MOVERATE
-                break
-             if case(DOWN):
-                pacmanObj['y'] += MOVERATE
-                break
-             if case(LEFT):
-                pacmanObj['x'] -= MOVERATE
-                break
-             if case(RIGHT):
-                pacmanObj['x'] += MOVERATE
-                break
-             if case(): # default, could also just omit condition or 'if True'
-                break
+        DoMoves()
+        
+    Draw()
+    
 
-    pygame.display.update()
-    FPSCLOCK.tick(FPS)
-
+def DoMoves():
+#Move Pacman
+     for case in switch(pacmanObj['facing']):
+         if case(UP):
+            pacmanObj['y'] -= MOVERATE
+            break
+         if case(DOWN):
+            pacmanObj['y'] += MOVERATE
+            break
+         if case(LEFT):
+            pacmanObj['x'] -= MOVERATE
+            break
+         if case(RIGHT):
+            pacmanObj['x'] += MOVERATE
+            break
+         if case(): # default, could also just omit condition or 'if True'
+            break
+            
 def DoEvents():
     for event in pygame.event.get():
       if event.type == QUIT or (event.type == KEYUP and event.key == K_ESCAPE):
@@ -93,6 +83,19 @@ def DoEvents():
                     pacmanObj['facing'] = RIGHT
 
 
+def Draw():
+    pacmanObj['rect'] = pygame.Rect( (pacmanObj['x'],
+                                               pacmanObj['y'],
+                                               pacmanObj['size'],
+                                               pacmanObj['size']) )
+    if DEBUG == 1:
+     print pacmanObj['rect']
+
+    DISPLAYSURF.fill(BGCOLOUR)
+    DISPLAYSURF.blit(pacmanObj['surface'], pacmanObj['rect'], PACMAN_RECT)
+    pygame.display.update()
+    FPSCLOCK.tick(FPS)
+    
 # This class provides the functionality we want. You only need to look at
 # this if you want to know how this works. It only needs to be defined
 # once, no need to muck around with its internals.
