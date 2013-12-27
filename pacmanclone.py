@@ -32,6 +32,7 @@ def main():
     pygame.display.set_caption('Pacman Clone!')
 
     pacmanObj = Pacman()
+
     
     while True: # main game loop
      RunGame()
@@ -85,7 +86,7 @@ def Draw():
                                                pacmanObj.size,
                                                pacmanObj.size) )
     if DEBUG == 1:
-     print pacmanObj.rect
+     print pacmanObj.surface
 
     DISPLAYSURF.fill(BGCOLOUR)
     DISPLAYSURF.blit(pacmanObj.surface, pacmanObj.rect, pacmanObj.FacingRect())
@@ -95,7 +96,8 @@ def Draw():
 
 
 
-class Animated:
+class Animated(object):
+    surface = None
     def FacingRect(self):
         for case in switch(self.facing):
             if case(UP):
@@ -106,15 +108,18 @@ class Animated:
                 return self.RECT_LEFT
             if case(RIGHT):
                 return self.RECT_RIGHT
+    def SetSurface(self, path):
+        self.surface= pygame.image.load(path)
+
+    facing = RIGHT
 
 class Pacman(Animated):
-    IMG = pygame.image.load('images\sprites\pacman_various_sheet.png')
+    def __init__(self):
+        self.SetSurface('images\sprites\pacman_various_sheet.png')
     RECT_RIGHT = pygame.Rect(120,0,PACMANSIZE,PACMANSIZE)
     RECT_LEFT = pygame.Rect(60,0,PACMANSIZE,PACMANSIZE)
     RECT_UP = pygame.Rect(29,0,PACMANSIZE,PACMANSIZE)
     RECT_DOWN = pygame.Rect(89,0,PACMANSIZE,PACMANSIZE)
-    surface= IMG
-    facing = RIGHT
     x= HALF_WINWIDTH
     y = HALF_WINHEIGHT
     size = PACMANSIZE
