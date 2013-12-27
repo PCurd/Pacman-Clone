@@ -6,7 +6,7 @@ WINDOWWIDTH = 640 # size of window's width in pixels
 WINDOWHEIGHT = 480 # size of windows' height in pixels
 HALF_WINWIDTH = int(WINDOWWIDTH / 2)
 HALF_WINHEIGHT = int(WINDOWHEIGHT / 2)
-PACMANSIZE = 31
+PACMANSIZE = 16
 MOVERATE = 1
 BGCOLOUR = pygame.color.Color(0,0,0,0)
 LEFT = 'left'
@@ -18,9 +18,9 @@ gameOverMode = False
 DEBUG = 0
 
 def setup():
-    global PACMAN_IMG, PACMAN_RECT
+    global PACMAN_IMG
     PACMAN_IMG = pygame.image.load('images\sprites\pacman_various_sheet.png')
-    PACMAN_RECT = pygame.Rect(398,7,PACMANSIZE,PACMANSIZE)
+
 
 
 def main():
@@ -35,7 +35,8 @@ def main():
                   'facing': RIGHT,
                   'x': HALF_WINWIDTH,
                   'y': HALF_WINHEIGHT,
-                 'size': PACMANSIZE}
+                 'size': PACMANSIZE,
+                 'obj': Pacman()}
     
     while True: # main game loop
      RunGame()
@@ -92,9 +93,29 @@ def Draw():
      print pacmanObj['rect']
 
     DISPLAYSURF.fill(BGCOLOUR)
-    DISPLAYSURF.blit(pacmanObj['surface'], pacmanObj['rect'], PACMAN_RECT)
+    DISPLAYSURF.blit(pacmanObj['surface'], pacmanObj['rect'], FacingRect(pacmanObj))
     pygame.display.update()
     FPSCLOCK.tick(FPS)
+
+def FacingRect(object):
+    for case in switch(object['facing']):
+        if case(UP):
+            return object['obj'].RECT_UP
+        if case(DOWN):
+            return object['obj'].RECT_DOWN
+        if case(LEFT):
+            return object['obj'].RECT_LEFT
+        if case(RIGHT):
+            return object['obj'].RECT_RIGHT
+
+
+
+
+class Pacman:
+    RECT_RIGHT = pygame.Rect(120,0,PACMANSIZE,PACMANSIZE)
+    RECT_LEFT = pygame.Rect(60,0,PACMANSIZE,PACMANSIZE)
+    RECT_UP = pygame.Rect(29,0,PACMANSIZE,PACMANSIZE)
+    RECT_DOWN = pygame.Rect(89,0,PACMANSIZE,PACMANSIZE) 
     
 # This class provides the functionality we want. You only need to look at
 # this if you want to know how this works. It only needs to be defined
